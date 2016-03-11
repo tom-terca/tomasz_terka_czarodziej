@@ -1,0 +1,14 @@
+[
+	{
+		"plik": "bodzio",
+		"nazwa": "bodzio"
+	},
+	{
+		"plik": "niemalepszego",
+		"nazwa": "niemalepszego"
+	},
+	{
+		"plik": "cudny",
+		"nazwa": "jakicudny"
+	}
+]
