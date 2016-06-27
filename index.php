@@ -127,19 +127,21 @@ $tla = getFileList('back');
 		}
 
 		div.muzyka {
-			position: absolute;
+			position: fixed;
 			width: 210px;
 			top: 0;
 			left: 0;
 			background-color: rgba(0, 0, 0, 0.6);
+			z-index: 10000;
 		}
 
 		div.tlo {
-			position: absolute;
+			position: fixed;
 			width: 210px;
 			top: 0;
 			right: 0;
 			background-color: rgba(0, 0, 0, 0.6);
+			z-index: 10000;
 		}
 
 		div.muzyka > p,
@@ -161,11 +163,67 @@ $tla = getFileList('back');
 			color: #55ff85;
 		}
 
+		div.game {
+			position: absolute;
+			top: 100%;
+			width: 100%;
+			height: 100%;
+			background-color: #111;
+			text-align: center;
+		}
+
+		@-webkit-keyframes rotating /* Safari and Chrome */ {
+		  from {
+		    -ms-transform: translate(-50%, -50%) rotate(0deg);
+		    -moz-transform: translate(-50%, -50%) rotate(0deg);
+		    -webkit-transform: translate(-50%, -50%) rotate(0deg);
+		    -o-transform: translate(-50%, -50%) rotate(0deg);
+		    transform: translate(-50%, -50%) rotate(0deg);
+		  }
+		  to {
+		    -ms-transform: translate(-50%, -50%) rotate(360deg);
+		    -moz-transform: translate(-50%, -50%) rotate(360deg);
+		    -webkit-transform: translate(-50%, -50%) rotate(360deg);
+		    -o-transform: translate(-50%, -50%) rotate(360deg);
+		    transform: translate(-50%, -50%) rotate(360deg);
+		  }
+		}
+		@keyframes rotating {
+		  from {
+		    -ms-transform: translate(-50%, -50%) rotate(0deg);
+		    -moz-transform: translate(-50%, -50%) rotate(0deg);
+		    -webkit-transform: translate(-50%, -50%) rotate(0deg);
+		    -o-transform: translate(-50%, -50%) rotate(0deg);
+		    transform: translate(-50%, -50%) rotate(0deg);
+		  }
+		  to {
+		    -ms-transform: translate(-50%, -50%) rotate(360deg);
+		    -moz-transform: translate(-50%, -50%) rotate(360deg);
+		    -webkit-transform: translate(-50%, -50%) rotate(360deg);
+		    -o-transform: translate(-50%, -50%) rotate(360deg);
+		    transform: translate(-50%, -50%) rotate(360deg);
+		  }
+		}
+
+		#paczuch {
+			position: absolute;
+			width: 200px;
+			top: 50%;
+			left: 50%;
+			cursor: pointer;
+			-webkit-animation: rotating 2s linear infinite;
+		  -moz-animation: rotating 2s linear infinite;
+		  -ms-animation: rotating 2s linear infinite;
+		  -o-animation: rotating 2s linear infinite;
+		  animation: rotating 2s linear infinite;
+		}
+
 		</style>
 	</head>
 
 	<body>
 		<audio id="muzyka" src="<?php echo '/' . $muzyczki[0]['name']; ?>" loop autoplay></audio>
+		<audio id="uuu" src="/uuu.mp3"></audio>
 
 		<video autoplay id="tlo" src="<?php echo '/' . $tla[0]['name']; ?>" loop muted></video>
 
@@ -202,9 +260,13 @@ $tla = getFileList('back');
 			<p class="countdown"><span id="days"></span> dni, <span id="hours"></span>:<span id="minutes"></span>:<span id="seconds"></span></p>
 		</div>
 
+		<div class="game">
+			<img id="paczuch" src="/img/paczuch.png">
+		</div>
+
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 		<script>
-		var czarodziej = new Date(1464912000000); //czarodziej terki
+		var czarodziej = new Date(1467410400000); //czarodziej terki
 
 		function getTimeRemaining(endtime){
 		  var t = Date.parse(endtime) - Date.parse(new Date());
@@ -252,6 +314,14 @@ $tla = getFileList('back');
 
 			$('.zmien-tlo').removeClass('active');
 			target.addClass('active');
+		});
+
+		$('#paczuch').click(function() {
+			$('#paczuch').css("width","250px");
+			document.getElementById("uuu").play();
+			setTimeout(function() {
+				$('#paczuch').css("width","");
+			}, 1000);
 		});
 		</script>
 	</body>
