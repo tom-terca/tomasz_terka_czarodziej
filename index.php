@@ -33,27 +33,6 @@
     return $retval;
   }
 
-// paske atencji
-if(isset($_POST['atencja'])) {
-	$atencja = trim($_POST['atencja']);
-
-	$file = 'paske_atencji.txt';
-	$dane = $atencja;
-	$fp = fopen($file, 'w');
-	flock($fp, 2);
-	fwrite($fp, $dane);
-	flock($fp, 3);
-	fclose($fp);
-}
-
-$attenform = file_get_contents("paske_atencji.txt");
-
-// wyrenderuj mi tu paske
-$attenform_html = '<form method="post" action="" id="attenform" style="display: none; visibility: hidden;">
-<input name="atencja" style="width: 100%;" value="'.$attenform.'" type="text">
-</form>';
-$attenform_html .= '<div style="height: 1.5em; width: 100%; text-align: center;" onclick=\'document.getElementById("atencja").style.visibility = "hidden";document.getElementById("atencja").style.display = "none";document.getElementById("attenform").style.visibility = "visible";document.getElementById("attenform").style.display = "block";\' id="atencja">'.htmlspecialchars($attenform).'</div>';
-
 $muzyczki = getFileList('audio');
 $tla = getFileList('back');
 ?>
@@ -127,7 +106,7 @@ $tla = getFileList('back');
 		}
 
 		div.muzyka {
-			position: fixed;
+			position: absolute;
 			width: 210px;
 			top: 0;
 			left: 0;
@@ -136,7 +115,7 @@ $tla = getFileList('back');
 		}
 
 		div.tlo {
-			position: fixed;
+			position: absolute;
 			width: 210px;
 			top: 0;
 			right: 0;
@@ -218,6 +197,52 @@ $tla = getFileList('back');
 		  animation: rotating 2s linear infinite;
 		}
 
+		.chat {
+			position: fixed;
+			bottom: 0px;
+			left: 0px;
+			height: 500px;
+			width: 300px;
+			background-color: rgba(0,0,0,0.5);
+		}
+
+		.messages {
+			height: 450px;
+			overflow: auto;
+		}
+
+		.enter {
+			height: 50px;
+		}
+
+		#message {
+			height: 100%;
+		}
+
+		#message input {
+	    width: 285px;
+	    padding: 17px 5px;
+	    font-size: 16px;
+		}
+
+		.chat p {
+		    font-size: 13px;
+		    margin: 5px;
+		}
+
+		.chat p:first-child {
+    	margin-top: 0px !important;
+		}
+
+		.chat .nick {
+		  font-weight: bold;
+		  margin-right: 5px;
+		}
+
+		.chat .message {
+		    font-weight: 400;
+		}
+
 		</style>
 	</head>
 
@@ -252,8 +277,6 @@ $tla = getFileList('back');
 		</div>
 
 		<div class="content">
-			<?php echo $attenform_html; ?>
-
 			<h1>Tomasz Terka</h1>
 
 			<p>Do czarodzieja pozostało:</p>
@@ -264,7 +287,19 @@ $tla = getFileList('back');
 			<img id="paczuch" src="/img/paczuch.png">
 		</div>
 
+		<div class="chat">
+			<div class="messages">
+
+			</div>
+			<div class="enter">
+				<form action="" id="message">
+					<input placeholder="Wiadomość [enter by wysłać]">
+				</form>
+			</div>
+		</div>
+
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+		<script src="js.cookie.js"></script>
 		<script>
 		var czarodziej = new Date(1467410400000); //czarodziej terki
 
@@ -323,6 +358,42 @@ $tla = getFileList('back');
 				$('#paczuch').css("width","");
 			}, 1000);
 		});
+
+		$('#message').submit(function(e) {
+			e.preventDefault();
+
+			var wiad = $('#message').children('input').val();
+			$('#message').children('input').val('');
+
+			$.post('chat.php', {
+				nick: Cookies.get('nick'),
+				message: wiad
+			}, function(body, status) {
+				$('.messages').html(body);
+			});
+		});
+
+		var nicki = [
+			'Terka',
+			'Rolly',
+			'Przadlo',
+			'Szufla',
+			'Jan Paweł ',
+			'Zalgo',
+			'Czaks',
+			'Lanceq',
+			'pierdzioszek'
+		]
+
+		if(!Cookies.get('nick')) {
+			Cookies.set('nick', nicki[Math.floor(nicki.length * Math.random())] + Math.round(Math.random() * 10000));
+		}
+
+		setInterval(function() {
+			$.get('chat.php', function(body, status) {
+				$('.messages').html(body);
+			});
+		}, 1000);
 		</script>
 	</body>
 
