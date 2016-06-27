@@ -15,7 +15,7 @@
 	if(file_exists('chat.txt')) {
 		$messages = json_decode(file_get_contents('chat.txt'));
 
-		for($i = sizeof($messages) - 17; $i < sizeof($messages); $i++) {
+		for($i = max(0, sizeof($messages) - 17); $i < sizeof($messages); $i++) {
 			$message = $messages[$i];
 			$resp .= '<p><span class="nick">' . $message->nick . ':</span><span class="message">' . $message->message . '</span></p>';
 		}
