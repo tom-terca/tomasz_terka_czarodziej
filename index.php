@@ -207,7 +207,7 @@ $tla = getFileList('back');
 		}
 
 		.messages {
-			height: 450px;
+			height: calc(100% - 50px);
 			overflow: auto;
 		}
 
@@ -287,7 +287,7 @@ $tla = getFileList('back');
 			<img id="paczuch" src="/img/paczuch.png">
 		</div>
 
-		<div class="chat">
+		<div style="display: none;" class="chat">
 			<div class="messages">
 
 			</div>
@@ -357,6 +357,7 @@ $tla = getFileList('back');
 			setTimeout(function() {
 				$('#paczuch').css("width","");
 			}, 1000);
+			$('.chat').show();
 		});
 
 		$('#message').submit(function(e) {
@@ -394,6 +395,8 @@ $tla = getFileList('back');
 				$('.messages').html(body);
 			});
 		}, 1000);
+
+		$('.chat').attr('style', 'max-height: calc(100% - ' + $('.muzyka').outerHeight() +'px);')
 		</script>
 	</body>
 
